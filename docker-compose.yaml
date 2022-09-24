@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  socketio:
+    build: ./Socketio_Server
+    ports:
+      - "3000:3000"
+    environment:
+      - SERVER_NAME=Socket.io
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=root
+      - RABBITMQ_PASS=root
+    depends_on:
+      - rabbitmq
+  signalr:
+    build: ./SignalR_Server
+    ports:
+      - "3001:80"
+    environment:
+      - SERVER_NAME=SignalR
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=root
+      - RABBITMQ_PASS=root
+    depends_on:
+      - rabbitmq
+    
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+    ports:
+      - "15672:15672"
+      - "5672:5672"
